@@ -33,7 +33,6 @@ public class TipsyEffects {
     @SubscribeEvent
     public static void iCanHear(ClientChatReceivedEvent.Player event) {
         try {
-            // 安全处理聊天消息
             Component modifiedMessage = getChatMessage(event.getMessage());
             BnCClientTextUtils.setupChatMessage(event.getPlayerChatMessage().withUnsignedContent(modifiedMessage));
             
@@ -51,8 +50,7 @@ public class TipsyEffects {
                 
                 event.setMessage(boundChat.append(newMessage));
             }
-            
-            // 重置醉酒状态
+
             BnCClientTextUtils.clearTipsyMessage();
             if (BnCClientTextUtils.clearDelayAmount <= 0) {
                 BnCClientTextUtils.tipsyMessageLevel = 0;
@@ -63,12 +61,10 @@ public class TipsyEffects {
             }
         } catch (Exception ex) {
             LOGGER.error("Error processing chat message: {}", event.getMessage().getString(), ex);
-            // 发生错误时保持原始消息不变
         }
     }
 
     private static Component getChatMessage(Component component) {
-        // 安全处理不同类型的聊天内容
         if (component.getContents() instanceof TranslatableContents translatable) {
             Object[] args = translatable.getArgs();
             if (args.length > 1) {
@@ -92,7 +88,6 @@ public class TipsyEffects {
     }
 
     static {
-        // AppleSkin 兼容性初始化
         if (ModList.get().isLoaded("appleskin")) {
             LOGGER.info("Initializing AppleSkin compatibility");
             IntoxicationAppleSkinCompatNeoForge.init();
